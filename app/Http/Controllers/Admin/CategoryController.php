@@ -11,16 +11,15 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->query('search', '');
-        
+        $search = $request->get('search');
+
         $query = Category::latest();
-        
+
         if ($search) {
             $query->where('name', 'LIKE', '%' . $search . '%');
         }
-        
+
         $categories = $query->paginate(10);
-        
         return view('admin.categories.index', compact('categories', 'search'));
     }
 

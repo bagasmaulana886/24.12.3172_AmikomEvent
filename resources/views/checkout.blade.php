@@ -19,7 +19,7 @@
 
     <main class="max-w-3xl mx-auto px-6 py-20">
         <div class="mb-12">
-            <a href="{{ route('events.show', 1) }}" class="text-indigo-600 font-bold flex items-center gap-2 mb-6">
+            <a href="{{ $event ? route('events.show', $event->id) : route('home') }}" class="text-indigo-600 font-bold flex items-center gap-2 mb-6">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
@@ -34,17 +34,17 @@
             <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
                 <h3 class="text-xl font-bold mb-6 border-b pb-4">Pesanan Anda</h3>
                 <div class="flex gap-6 items-start">
-                    <img src="{{ asset('assets/concert.png') }}" alt="Event" class="w-24 h-24 rounded-2xl object-cover">
+                    <img src="{{ ($event && $event->poster_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($event->poster_path)) ? asset('storage/' . $event->poster_path) : asset('assets/concert.png') }}" alt="{{ $event ? $event->title : 'Event' }}" class="w-24 h-24 rounded-2xl object-cover">
                     <div>
-                        <h4 class="font-extrabold text-lg">Jazz Night 2024: A Celebration</h4>
-                        <p class="text-slate-500">16 Nov 2024 • The Blue Note Lounge</p>
-                        <p class="text-indigo-600 font-bold mt-2">1 x Rp 150.000</p>
+                        <h4 class="font-extrabold text-lg">{{ $event ? $event->title : 'Event tidak tersedia' }}</h4>
+                        <p class="text-slate-500">{{ $event ? \Carbon\Carbon::parse($event->date)->format('d M Y H:i') . ' • ' . $event->location : 'Silakan pilih event terlebih dahulu.' }}</p>
+                        <p class="text-indigo-600 font-bold mt-2">{{ $event ? '1 x Rp ' . number_format($event->price, 0, ',', '.') : '-' }}</p>
                     </div>
                 </div>
                 <div class="mt-8 pt-6 border-t space-y-3">
                     <div class="flex justify-between text-slate-500">
                         <span>Harga Tiket</span>
-                        <span>Rp 150.000</span>
+                        <span>{{ $event ? 'Rp ' . number_format($event->price, 0, ',', '.') : 'Rp 0' }}</span>
                     </div>
                     <div class="flex justify-between text-slate-500">
                         <span>Biaya Layanan</span>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="flex justify-between text-2xl font-black mt-4 pt-4 border-t">
                         <span>Total Bayar</span>
-                        <span class="text-indigo-600">Rp 155.000</span>
+                        <span class="text-indigo-600">{{ $event ? 'Rp ' . number_format($event->price + 5000, 0, ',', '.') : 'Rp 5.000' }}</span>
                     </div>
                 </div>
             </div>

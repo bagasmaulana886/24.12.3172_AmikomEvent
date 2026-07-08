@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('partners', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('logo_url');
+            $table->string('logo_url', 1000);
             $table->timestamps();
         });
     }

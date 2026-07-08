@@ -7,20 +7,20 @@
         <a href="{{ route('admin.partners.create') }}" class="bg-indigo-600 text-white px-4 py-2 rounded font-semibold hover:bg-indigo-700">Tambah Partner</a>
     </div>
 
-    @if(session('success'))
-    <div class="bg-green-100 text-green-700 p-4 rounded mb-5 border border-green-200">{{ session('success') }}</div>
-    @endif
-
     <!-- Search Form -->
-    <div class="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+    <div class="mb-6">
         <form action="{{ route('admin.partners.index') }}" method="GET" class="flex gap-2">
-            <input type="text" name="search" value="{{ $search }}" placeholder="Cari partner berdasarkan nama..." class="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-600">
+            <input type="text" name="search" placeholder="Cari nama partner..." value="{{ $search ?? '' }}" class="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-600">
             <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded font-semibold hover:bg-indigo-700">Cari</button>
             @if($search)
             <a href="{{ route('admin.partners.index') }}" class="bg-gray-500 text-white px-6 py-2 rounded font-semibold hover:bg-gray-600">Reset</a>
             @endif
         </form>
     </div>
+
+    @if(session('success'))
+    <div class="bg-green-100 text-green-700 p-4 rounded mb-5 border border-green-200">{{ session('success') }}</div>
+    @endif
 
     <div class="overflow-x-auto">
         <table class="w-full bg-white rounded-lg shadow-sm border border-gray-200 text-left">
@@ -37,7 +37,7 @@
                 @forelse($partners as $partner)
                 <tr class="border-b border-gray-100 hover:bg-gray-50">
                     <td class="p-4">
-                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="w-12 h-12 rounded object-cover">
+                        <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="w-20 h-20 rounded object-contain">
                     </td>
                     <td class="p-4 text-gray-800 font-semibold">{{ $partner->name }}</td>
                     <td class="p-4 text-gray-600 text-sm truncate">{{ $partner->logo_url }}</td>
