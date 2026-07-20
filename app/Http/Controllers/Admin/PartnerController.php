@@ -10,16 +10,14 @@ class PartnerController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
-
         $query = Partner::latest();
 
-        if ($search) {
-            $query->where('name', 'LIKE', '%' . $search . '%');
+        if ($request->filled('search')) {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
         }
 
-        $partners = $query->paginate(10);
-        return view('admin.partners.index', compact('partners', 'search'));
+        $partners = $query->paginate(10)->appends($request->only('search'));
+        return view('admin.partners.index', compact('partners'));
     }
 
     public function create()
@@ -29,14 +27,16 @@ class PartnerController extends Controller
 
     public function store(Request $request)
     {
+        // Menerapkan validasi data request dari pengguna
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'logo_url' => 'required|url|max:1000',
+            'logo_url' => 'required|string|max:255',
         ]);
 
+        // Menyimpan data yang telah divalidasi ke dalam tabel menggunakan Model
         Partner::create($data);
 
-        return redirect()->route('admin.partners.index')->with('success', 'Partner berhasil ditambahkan.');
+        return redirect()->route('admin.partners.index')->with('success', 'Data Partner berhasil ditambahkan.');
     }
 
     public function edit(Partner $partner)
@@ -46,20 +46,22 @@ class PartnerController extends Controller
 
     public function update(Request $request, Partner $partner)
     {
+        // Menerapkan validasi data request dari pengguna
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'logo_url' => 'required|url|max:1000',
+            'logo_url' => 'required|string|max:255',
         ]);
 
+        // Update data yang telah divalidasi
         $partner->update($data);
 
-        return redirect()->route('admin.partners.index')->with('success', 'Partner berhasil diperbarui.');
+        return redirect()->route('admin.partners.index')->with('success', 'Data Partner berhasil diperbarui.');
     }
 
     public function destroy(Partner $partner)
     {
         $partner->delete();
-
-        return redirect()->route('admin.partners.index')->with('success', 'Partner berhasil dihapus.');
+        return redirect()->route('admin.partners.index')->with('success', 'Data Partner berhasil dihapus.');
     }
 }
+

@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Event;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Database\Seeders\PartnerSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Admin Amikom',
             'email' => 'admin@amikom.ac.id',
-            'password' => bcrypt('admin123'),
+            'password' => 'admin123',
             'role' => 'admin',
         ]);
 
@@ -118,5 +119,8 @@ class DatabaseSeeder extends Seeder
             'stock' => 250,
             'poster_path' => 'posters/event-7.png',
         ]);
+
+        // 4. Seed Partner Data
+        $this->call(PartnerSeeder::class);
     }
 }

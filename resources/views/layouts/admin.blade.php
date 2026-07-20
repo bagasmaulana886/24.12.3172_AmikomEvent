@@ -47,6 +47,15 @@
                 </svg>
                 Kelola Event
             </a>
+            <a href="{{ route('admin.partners.index') }}"
+                class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.partners.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
+                <svg class="w-5 h-5 {{ request()->routeIs('admin.partners.*') ? 'text-indigo-300' : 'text-indigo-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-2a6 6 0 0112 0v2zm6-6h-6m3-3h3m-3 0v6">
+                    </path>
+                </svg>
+                Manajemen Partner
+            </a>
             <a href="{{ route('admin.transactions.index') }}"
                 class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.transactions.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
                 <svg class="w-5 h-5 {{ request()->routeIs('admin.transactions.*') ? 'text-indigo-300' : 'text-indigo-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,15 +74,6 @@
                 </svg>
                 Manajemen Kategori
             </a>
-            <a href="{{ route('admin.partners.index') }}"
-                class="flex items-center gap-3 px-4 py-3 {{ request()->routeIs('admin.partners.*') ? 'bg-indigo-800 text-white' : 'hover:bg-indigo-800' }} rounded-xl font-bold transition">
-                <svg class="w-5 h-5 {{ request()->routeIs('admin.partners.*') ? 'text-indigo-300' : 'text-indigo-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M12 4.354a4 4 0 110 8.646 4 4 0 010-8.646M9 9H3v10a6 6 0 006 6h12a6 6 0 006-6V9h-6a4 4 0 00-4-4H9z">
-                    </path>
-                </svg>
-                Manajemen Partner
-            </a>
         </nav>
 
         <div class="pt-6 border-t border-indigo-800 space-y-2">
@@ -86,17 +86,11 @@
                 </svg>
                 Ke Halaman User
             </a>
-
-            <form method="POST" action="{{ route('admin.logout') }}">
+            <form method="POST" action="{{ route('admin.logout') }}" class="mt-4">
                 @csrf
                 <button type="submit"
-                    class="w-full text-left flex items-center gap-3 px-4 py-3 text-rose-200 hover:text-white hover:bg-rose-700 rounded-xl transition font-medium">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                        </path>
-                    </svg>
-                    Logout
+                    class="w-full rounded-3xl bg-slate-700 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition">
+                    Logout Admin
                 </button>
             </form>
         </div>

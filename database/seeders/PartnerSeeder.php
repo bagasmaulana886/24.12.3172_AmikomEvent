@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Partner;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class PartnerSeeder extends Seeder
 {
@@ -12,29 +14,14 @@ class PartnerSeeder extends Seeder
      */
     public function run(): void
     {
-        Partner::create([
-            'name' => 'Tech Innovation Indonesia',
-            'logo_url' => 'https://placehold.co/200x200?text=Tech+Innovation',
-        ]);
+        $faker = Faker::create();
 
-        Partner::create([
-            'name' => 'Digital Solutions Asia',
-            'logo_url' => 'https://placehold.co/200x200?text=Digital+Solutions',
-        ]);
-
-        Partner::create([
-            'name' => 'Amikom Yogyakarta',
-            'logo_url' => 'https://placehold.co/200x200?text=Amikom',
-        ]);
-
-        Partner::create([
-            'name' => 'Creative Agency Studio',
-            'logo_url' => 'https://placehold.co/200x200?text=Creative+Agency',
-        ]);
-
-        Partner::create([
-            'name' => 'Cloud Computing Services',
-            'logo_url' => 'https://placehold.co/200x200?text=Cloud+Services',
-        ]);
+        // Generate minimal 5 partner data dengan Faker
+        for ($i = 1; $i <= 5; $i++) {
+            Partner::create([
+                'name' => $faker->company(),
+                'logo_url' => 'https://placehold.co/200x200?text=' . urlencode('Partner ' . $i),
+            ]);
+        }
     }
 }

@@ -5,11 +5,9 @@
         <!-- Left: Poster -->
         <div class="lg:col-span-1">
             <div class="sticky top-32">
-                <img src="{{ ($event->poster_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($event->poster_path)) ? asset('storage/' . $event->poster_path) : 'https://placehold.co/400x600' }}" alt="{{ $event->title }}"
-                    class="w-full rounded-[2.5rem] shadow-2xl border-8 border-white object-cover">
+                <img src="{{ ($event->poster_path && Storage::disk('public')->exists($event->poster_path)) ? asset('storage/' . $event->poster_path) : 'https://placehold.co/200x600' }}" alt="{{ $event->title }}"
+                    class="w-full rounded-[2.5rem] shadow-2xl border-8 border-white">
                 <div class="mt-8 p-6 bg-white rounded-3xl border border-slate-100 shadow-sm">
-                    <h4 class="font-bold mb-4">Kategori Acara</h4>
-                    <p class="text-slate-700 font-semibold mb-4">{{ $event->category->name ?? 'Tidak tersedia' }}</p>
                     <h4 class="font-bold mb-4">Penyelenggara</h4>
                     <div class="flex items-center gap-4">
                         <div
@@ -54,9 +52,7 @@
 
             <div class="space-y-4">
                 <h3 class="text-2xl font-bold mb-4">Deskripsi Event</h3>
-                <p class="text-lg text-slate-600 leading-relaxed">
-                    {{ $event->description ?: 'Deskripsi belum tersedia untuk acara ini.' }}
-                </p>
+                <p class="text-lg text-slate-600 leading-relaxed">{{ $event->description ?: 'Deskripsi event akan segera tersedia.' }}</p>
             </div>
 
             <div

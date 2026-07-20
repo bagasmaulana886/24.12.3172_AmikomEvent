@@ -13,18 +13,16 @@ class HomeController extends Controller
     {
         // 1. Ambil semua jenis kategori untuk tampilan filter tab button
         $categories = Category::all();
-
-        // 2. Ambil semua partner untuk tampilan di homepage
         $partners = Partner::latest()->get();
 
-        // 3. Buat kueri dasar untuk mengambil event:
+        // 2. Buat kueri dasar untuk mengambil event:
         // - Gunakan Eager loading `category`
         // - Hanya tampilkan kegiatan dengan jadwal yang belum kedaluwarsa (>= hari ini)
         $query = Event::with('category')
             ->where('date', '>=', now())
             ->orderBy('date', 'asc');
 
-        // 4. Filter query jika url memiliki parameter pencarian spesifik ?category=...
+        // 3. Filter query jika url memiliki parameter pencarian spesifik ?category=...
         if ($request->has('category') && $request->category != '') {
             // Saring berdasarkan relasi tabel rujukan melalui properti slug kategori.
             $query->whereHas('category', function ($q) use ($request) {
@@ -32,7 +30,7 @@ class HomeController extends Controller
             });
         }
 
-        // 5. Eksekusi query dan kirim data hasilnya ke template Blade
+        // 4. Eksekusi query dan kirim data hasilnya ke template Blade
         $events = $query->get();
 
         return view('welcome', compact('events', 'categories', 'partners'));

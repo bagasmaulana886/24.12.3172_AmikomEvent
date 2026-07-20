@@ -75,6 +75,29 @@
             @endforeach
         </div>
 
+        <!-- Partner Grid Publik -->
+        <section class="max-w-7xl mx-auto px-6 py-10">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
+                <div>
+                    <h2 class="text-3xl font-extrabold mb-2">Partner Terpercaya</h2>
+                    <p class="text-slate-500 font-medium">Mitra yang mendukung AmikomEventHub dalam menyajikan pengalaman event terbaik.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                @forelse($partners as $partner)
+                <div class="bg-white rounded-3xl border border-slate-100 p-4 flex flex-col items-center text-center shadow-sm hover:shadow-lg transition">
+                    <img src="{{ $partner->logo_url }}" alt="Logo {{ $partner->name }}" class="w-20 h-20 object-cover rounded-full mb-3">
+                    <p class="text-sm font-semibold text-slate-700">{{ $partner->name }}</p>
+                </div>
+                @empty
+                <div class="col-span-full text-center p-8 bg-slate-50 rounded-3xl border border-slate-200 text-slate-500">
+                    Belum ada partner terdaftar saat ini.
+                </div>
+                @endforelse
+            </div>
+        </section>
+
         <!-- Zona Menampilkan Grid List Event -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Event Card 1 -->
@@ -82,7 +105,7 @@
             <div
                 class="group bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden">
                 <div class="relative overflow-hidden aspect-[3/4]">
-                    <img src="{{ ($event->poster_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($event->poster_path)) ? asset('storage/' . $event->poster_path) : 'https://placehold.co/200x600' }}" alt="{{ $event->title }}"
+                    <img src="{{ ($event->poster_path && Storage::disk('public')->exists($event->poster_path)) ? asset('storage/' . $event->poster_path) : 'https://placehold.co/200x600' }}" alt="{{ $event->title }}"
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                     <div
                         class="absolute top-4 left-4 px-3 py-1 bg-white/90 backdrop-blur rounded-lg text-xs font-bold uppercase text-indigo-600">
@@ -107,28 +130,6 @@
             </div>
             @endforeach
         </div>
-    </section>
-
-    <!-- Partners Section -->
-    <section class="max-w-7xl mx-auto px-6 py-20 bg-gray-50 rounded-3xl">
-        <div class="mb-12 text-center">
-            <h2 class="text-3xl font-extrabold mb-2">Mitra Kami</h2>
-            <p class="text-slate-500 font-medium">Dipercaya oleh berbagai mitra terkemuka</p>
-        </div>
-
-        @if($partners->count() > 0)
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            @foreach($partners as $partner)
-            <div class="flex items-center justify-center bg-white rounded-xl p-8 shadow-sm hover:shadow-lg transition min-h-[150px]">
-                <img src="{{ $partner->logo_url }}" alt="{{ $partner->name }}" class="max-w-full max-h-24 object-contain" loading="lazy">
-            </div>
-            @endforeach
-        </div>
-        @else
-        <div class="text-center text-gray-500 py-12">
-            <p class="text-lg">Belum ada data partner</p>
-        </div>
-        @endif
     </section>
 @endsection
 

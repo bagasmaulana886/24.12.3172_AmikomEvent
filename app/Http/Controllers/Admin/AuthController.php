@@ -20,14 +20,15 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt(array_merge($credentials, ['role' => 'admin']))) {
             $request->session()->regenerate();
+
             return redirect()->route('admin.dashboard');
         }
 
         return back()->withErrors([
             'email' => 'Email atau Password yang Anda berikan tidak terdaftar di rekaman kami.',
-        ]);
+        ])->onlyInput('email');
     }
 
     public function logout(Request $request)
@@ -35,6 +36,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/admin/login');
+
+        return redirect()->route('admin.login');
     }
 }

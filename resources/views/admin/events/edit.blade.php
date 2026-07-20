@@ -9,7 +9,7 @@
 
         <div class="mb-4">
             <label class="block mb-2 font-medium text-gray-700">Judul Event</label>
-            <input type="text" name="title" value="{{ old('title', $event->title) }}" class="w-full border border-gray-300 p-2.5 rounded focus:ring focus:ring-indigo-200 @error('title') border-red-500 @enderror" required>
+            <input type="text" name="title" value="{{ $event->title }}" class="w-full border border-gray-300 p-2.5 rounded focus:ring focus:ring-indigo-200 @error('title') border-red-500 @enderror" required>
             @error('title')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
@@ -19,7 +19,8 @@
             <label class="block mb-2 font-medium text-gray-700">Kategori Event</label>
             <select name="category_id" class="w-full border border-gray-300 p-2.5 rounded focus:ring focus:ring-indigo-200 @error('category_id') border-red-500 @enderror" required>
                 @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id', $event->category_id) == $category->id ? 'selected' : '' }}>
+                    <!-- Teknik logika kondisional (Ternary) memastikan pemilihan menu default merujuk pada kategori sebelumnya -->
+                    <option value="{{ $category->id }}" {{ $event->category_id == $category->id ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
                 @endforeach
@@ -30,8 +31,8 @@
         </div>
 
         <div class="mb-4">
-            <label class="block mb-2 font-medium text-gray-700">Deskripsi Pendek (Opsional)</label>
-            <textarea name="description" class="w-full border border-gray-300 p-2.5 rounded focus:ring focus:ring-indigo-200 @error('description') border-red-500 @enderror" rows="3">{{ old('description', $event->description) }}</textarea>
+            <label class="block mb-2 font-medium text-gray-700">Deskripsi Pendek</label>
+            <textarea name="description" class="w-full border border-gray-300 p-2.5 rounded focus:ring focus:ring-indigo-200 @error('description') border-red-500 @enderror" rows="3" required>{{ $event->description }}</textarea>
             @error('description')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
@@ -40,21 +41,21 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-4">
             <div>
                 <label class="block mb-2 font-medium text-gray-700">Tanggal & Waktu</label>
-                <input type="datetime-local" name="date" value="{{ old('date', $event->date) }}" class="w-full border border-gray-300 p-2.5 rounded @error('date') border-red-500 @enderror" required>
+                <input type="datetime-local" name="date" value="{{ $event->date }}" class="w-full border border-gray-300 p-2.5 rounded @error('date') border-red-500 @enderror" required>
                 @error('date')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
             <div>
                 <label class="block mb-2 font-medium text-gray-700">Rencana Harga Masuk (Rp)</label>
-                <input type="number" name="price" value="{{ old('price', $event->price) }}" min="0" class="w-full border border-gray-300 p-2.5 rounded @error('price') border-red-500 @enderror" required>
+                <input type="number" name="price" value="{{ $event->price }}" class="w-full border border-gray-300 p-2.5 rounded @error('price') border-red-500 @enderror" required>
                 @error('price')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
             </div>
             <div>
                 <label class="block mb-2 font-medium text-gray-700">Kapasitas Stok Kuota</label>
-                <input type="number" name="stock" value="{{ old('stock', $event->stock) }}" min="1" class="w-full border border-gray-300 p-2.5 rounded @error('stock') border-red-500 @enderror" required>
+                <input type="number" name="stock" value="{{ $event->stock }}" class="w-full border border-gray-300 p-2.5 rounded @error('stock') border-red-500 @enderror" required>
                 @error('stock')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -63,22 +64,16 @@
 
         <div class="mb-6">
             <label class="block mb-2 font-medium text-gray-700">Lokasi / Gedung</label>
-            <input type="text" name="location" value="{{ old('location', $event->location) }}" class="w-full border border-gray-300 p-2.5 rounded @error('location') border-red-500 @enderror" required>
+            <input type="text" name="location" value="{{ $event->location }}" class="w-full border border-gray-300 p-2.5 rounded @error('location') border-red-500 @enderror" required>
             @error('location')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
         </div>
 
-        @if($event->poster_path)
         <div class="mb-6">
-            <label class="block mb-2 font-medium text-gray-700">Poster Saat Ini</label>
-            <img src="{{ (\Illuminate\Support\Facades\Storage::disk('public')->exists($event->poster_path)) ? asset('storage/' . $event->poster_path) : 'https://placehold.co/200x600' }}" class="w-48 h-64 rounded-xl object-cover border border-gray-200 shadow-sm" alt="Poster {{ $event->title }}">
-        </div>
-        @endif
-
-        <div class="mb-6">
-            <label class="block mb-2 font-medium text-gray-700">Ganti Poster Event (Opsional)</label>
+            <label class="block mb-2 font-medium text-gray-700">Poster Event</label>
             <input type="file" name="poster" accept="image/*" class="w-full border border-gray-300 p-2.5 rounded @error('poster') border-red-500 @enderror">
+            <p class="text-gray-500 text-sm mt-2">Unggah file baru untuk mengganti poster lama. Maksimal 2MB.</p>
             @error('poster')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror

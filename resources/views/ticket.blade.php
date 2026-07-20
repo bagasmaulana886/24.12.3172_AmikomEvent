@@ -35,7 +35,7 @@
             <!-- Ticket Header -->
             <div class="p-8 bg-indigo-50 border-b-4 border-dashed border-indigo-100 text-center relative">
                 <p class="text-indigo-600 font-bold uppercase tracking-widest text-xs mb-2">E-Ticket Resmi</p>
-                <h2 class="text-2xl font-black leading-tight">Jazz Night 2024: A Celebration</h2>
+                <h2 class="text-2xl font-black leading-tight">{{ $transaction->event->title }}</h2>
 
                 <!-- Ticket Side Cuts -->
                 <div class="absolute -left-4 -bottom-4 w-8 h-8 bg-indigo-600 rounded-full"></div>
@@ -47,19 +47,19 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div>
                         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Nama Pembeli</p>
-                        <p class="font-bold text-lg">Donni Prabowo</p>
+                        <p class="font-bold text-lg">{{ $transaction->customer_name }}</p>
                     </div>
                     <div>
                         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Tanggal & Waktu</p>
-                        <p class="font-bold text-lg">16 Nov, 19:30</p>
+                        <p class="font-bold text-lg">{{ \Carbon\Carbon::parse($transaction->event->date)->format('d M, H:i') }}</p>
                     </div>
                     <div>
                         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Order ID</p>
-                        <p class="font-bold">TRX-99210</p>
+                        <p class="font-bold">{{ $transaction->order_id }}</p>
                     </div>
                     <div>
                         <p class="text-slate-400 text-xs font-bold uppercase mb-1">Lokasi</p>
-                        <p class="font-bold">Blue Note Lounge</p>
+                        <p class="font-bold">{{ $transaction->event->location }}</p>
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@
                             <div class="w-1/4 h-1/4 bg-slate-900"></div>
                         </div>
                     </div>
-                    <p class="mt-4 font-mono font-bold text-slate-800">TKT-001293848</p>
+                    <p class="mt-4 font-mono font-bold text-slate-800">TKT-{{ sprintf('%09d', $transaction->id) }}</p>
                 </div>
             </div>
 

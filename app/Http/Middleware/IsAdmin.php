@@ -8,15 +8,14 @@ use Illuminate\Support\Facades\Auth;
 
 class IsAdmin
 {
-    /**
-     * Handle an incoming request.
-     */
     public function handle(Request $request, Closure $next)
     {
-        $user = Auth::user();
+        if (! Auth::check() || Auth::user()->role !== 'admin') {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        if (! $user || $user->role !== 'admin') {
-            abort(403, 'Unauthorized.');
+            return redirect()->route('admin.login');
         }
 
         return $next($request);

@@ -25,7 +25,6 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
-        // Menerapkan validasi data request dari pengguna
         $data = $request->validate([
             'category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
@@ -34,7 +33,7 @@ class EventController extends Controller
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:1',
-            'poster' => 'nullable|image|max:2048'
+            'poster' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('poster')) {
@@ -67,25 +66,25 @@ class EventController extends Controller
             'location' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|numeric|min:1',
-            'poster' => 'nullable|image|max:2048'
+            'poster' => 'nullable|image|max:2048',
         ]);
 
         if ($request->hasFile('poster')) {
             if ($event->poster_path) {
                 Storage::disk('public')->delete($event->poster_path);
             }
+
             $data['poster_path'] = $request->file('poster')->store('posters', 'public');
         }
 
         $event->update($data);
 
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui.');
+        return redirect()->route('admin.events.index')->with('success', 'Rincian data event berhasil diperbarui.');
     }
 
     public function destroy(Event $event)
     {
-        // Hapus file poster dari storage jika ada untuk menghindari pemborosan ruang
-        if ($event->poster_path && Storage::disk('public')->exists($event->poster_path)) {
+        if ($event->poster_path) {
             Storage::disk('public')->delete($event->poster_path);
         }
 

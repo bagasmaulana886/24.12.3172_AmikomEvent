@@ -11,16 +11,16 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
-
+        // Use stored `events_count` column so jumlah event bisa di-CRUD secara manual
         $query = Category::latest();
 
-        if ($search) {
-            $query->where('name', 'LIKE', '%' . $search . '%');
+        if ($request->filled('search')) {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
         }
 
-        $categories = $query->paginate(10);
-        return view('admin.categories.index', compact('categories', 'search'));
+        $categories = $query->paginate(10)->appends($request->only('search'));
+
+        return view('admin.categories.index', compact('categories'));
     }
 
     public function create()
@@ -32,13 +32,24 @@ class CategoryController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
+            'events_count' => 'nullable|integer|min:0',
         ]);
 
+        // Generate slug from name
         $data['slug'] = Str::slug($data['name']);
+
+        // Ensure events_count has a value
+        $data['events_count'] = $data['events_count'] ?? 0;
 
         Category::create($data);
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan.');
+    }
+
+    public function show(Category $category)
+    {
+        $category->load('events');
+        return view('admin.categories.show', compact('category'));
     }
 
     public function edit(Category $category)
@@ -50,9 +61,14 @@ class CategoryController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+            'events_count' => 'nullable|integer|min:0',
         ]);
 
+        // Generate slug from name
         $data['slug'] = Str::slug($data['name']);
+
+        // Ensure events_count has a value
+        $data['events_count'] = $data['events_count'] ?? 0;
 
         $category->update($data);
 
@@ -61,13 +77,13 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        // Cek apakah kategori memiliki events
-        if ($category->events()->exists()) {
-            return redirect()->route('admin.categories.index')->with('error', 'Kategori tidak bisa dihapus karena masih memiliki event terkait.');
+        // Check if category has events
+        if ($category->events()->count() > 0) {
+            return redirect()->route('admin.categories.index')->with('error', 'Kategori tidak dapat dihapus karena masih memiliki event terkait.');
         }
 
         $category->delete();
-
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
     }
 }
+
